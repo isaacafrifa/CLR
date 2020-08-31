@@ -9,8 +9,8 @@ A spring boot powered backend for my Bug Tracker
 
 ### General Info ###
 
-* This project serves as a starter pack for eCommerce applications using basic microservices such as product,customer,orders etc.
-* This project is strictly for *demo* purposes
+* This project serves a backend for my Bug Tracker (React App). This application uses a monolith architecture.
+* This project is as at now strictly for *demo* purposes and will be used be published on heroku soon.
 * Version : v1
 
 ### Technologies ###
@@ -18,28 +18,27 @@ Project is created with:
 
 * Spring boot 
 * Maven
-* Netflix Eureka
-* Hystix
-* Spring Cloud - Config Server & Sleuth
-* Zipkin
+* Spring Security 5
+* Zipkin (yet to be added)
+* Spring Cloud - Config Server & Sleuth (yet to be added)
+
 
 ### Features ###
- The project for now entails these microservices: 
- 
-* customer-service
-* product-service
-* order-service
-* stock-service
-* product-stock-service
+ The project for now has the following features: 
+* Authentication
+* Authorization
+
+
+### User Stories ###
+ The project for now has the following: 
+* As a user, I want register so that will be authorized by an Admin User.
+* As an authorized user, I want to login so that I can access my dahsboard.
 
 ### Future Additions
-* shipping-service
-* cart-service
-* ratings-service
 
 
 ### Credits ###
-* https://jsonplaceholder.typicode.com/
+* 
 
 
 ### Who do I talk to? ###
