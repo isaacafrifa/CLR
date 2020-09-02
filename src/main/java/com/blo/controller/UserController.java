@@ -70,26 +70,7 @@ public class UserController {
 		return authentication.getName();
 	}
 
-	/*
-	 * POSTS
-	 */
-	@PostMapping(value = "/registration"
-	 , consumes = MediaType.APPLICATION_JSON_VALUE
-	)
-	public ResponseEntity<Object> register(@Valid @RequestBody User user) {
-		LOGGER.info("INITIATING REGISTRATION OF USER [DETAILS= " + user + "]");
 
-		// sanitizing inputs
-		// String whatever = InputSanitizer.cleanIt(whatever);
-//		if (userService.usernameExists(user.getUsername())) {
-//			LOGGER.warn("CUSTOMER USERNAME [" + user.getUsername() + "] ALREADY EXISTS");
-//			throw new UsernameAlreadyExists();
-//		}
-//		userService.createUser(user);
-		LOGGER.info("USER [DETAILS= " + user + "] REGISTERED SUCCESSFULLY");
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-	
 	
 						/*	  Unused or Improved Methods	 */
 	
@@ -101,7 +82,7 @@ public class UserController {
 //		
 //	}
 	
-	
+
 	
 ////
 ////	using spring security's default "/login" endpoint hence below method not needed

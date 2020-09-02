@@ -25,12 +25,21 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 //	}
 	
 	
+	
+	@ExceptionHandler(UserNotFound.class)
+	public ResponseEntity<APIError> handleUserNotFoundException(UserNotFound ex, WebRequest request) {
+		APIError errorDetails = new APIError(HttpStatus.NOT_FOUND.value(), ex.getMessage(), ex.getLocalizedMessage(),
+				request.getDescription(false) + "",LocalDateTime.now());
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+	}
+	
 	@ExceptionHandler(UsernameAlreadyExists.class)
 	public ResponseEntity<APIError> handleUserAlreadyExistsException(UsernameAlreadyExists ex, WebRequest request) {
 		APIError errorDetails = new APIError(HttpStatus.CONFLICT.value(), ex.getMessage(), ex.getLocalizedMessage(),
 				request.getDescription(false) + "",LocalDateTime.now());
 		return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
 	}
+	
 	
 
 	

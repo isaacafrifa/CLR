@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.blo.entity.User;
+import com.blo.exception.UserNotFound;
 import com.blo.repository.UserRepository;
 
 @Service
@@ -24,7 +25,7 @@ public class UserService {
 		User user =this.userRepository.findByUsername(username);
 		if(user==null) {
 			LOGGER.warn("USER [username= " + username + "] NOT FOUND");
-			throw new UsernameNotFoundException("User doesn't exist");		
+			throw new UserNotFound();		
 		}
 		return user;	
 	}

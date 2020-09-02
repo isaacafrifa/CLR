@@ -7,9 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "bugtracker_user")
+@Table(name = "bugtracker_login")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -26,6 +26,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	@Column(name="ID")
+	//@JsonIgnore
 	private long id;
 	
 	@Column(name="USERNAME", nullable = false)
@@ -37,9 +38,12 @@ public class User {
 	@NotBlank(message="Password must not be empty")
 	 @Size(min=8, message = "Password must be more than 8 characters")
    // @Size(min=10, max=20, message = "Password must be between 10 and 20 characters long")
-	//@JsonIgnore
 	private String password;
 	
+	/* not doing a bidirectional one-to-one mapping, so this LOC is commented out */
+//	 @OneToOne(mappedBy = "user")  
+//	private UserProfile userProfile;
+
 	
 	
 	//use enums for the params below
@@ -50,11 +54,6 @@ public class User {
 
 	
 	
-//	@Column(name="USER_TYPE")
-//	@Min(value = 1, message = "User Type cant be less than 1")
-//	@Max(value = 2, message = "User Type cant be more than 2")
-//	@NotNull(message = "User type is mandatory")
-//	private int userType;
 //	
 //	@Column(name="LAST_LOGIN")
 //	@UpdateTimestamp
