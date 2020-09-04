@@ -1,7 +1,10 @@
 package com.blo.entity;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,7 +12,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.blo.model.RolesEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,7 +42,6 @@ public class User {
 	@Column(name="PASSWORD")
 	@NotBlank(message="Password must not be empty")
 	 @Size(min=8, message = "Password must be more than 8 characters")
-   // @Size(min=10, max=20, message = "Password must be between 10 and 20 characters long")
 	private String password;
 	
 	/* not doing a bidirectional one-to-one mapping, so this LOC is commented out */
@@ -45,25 +49,30 @@ public class User {
 //	private UserProfile userProfile;
 
 	
+	@Column(name="ENABLED")
+	private int isAccountEnabled;
+
+	@Column(name="LAST_LOGIN")
+	@UpdateTimestamp
+	private Date lastLogin;
 	
-	//use enums for the params below
-//	private Boolean isAccountEnabled;
-//	
-//	private String roles; 
+
+	@Column(name = "ROLE")
+	private int role; 
+	
+	// not using Enum approach 
+//	@Column(name = "ROLE")
+//	@Enumerated(EnumType.ORDINAL) //using ordinal will pose a problem when order of Enum changes
+//	 private RolesEnum role;
+	
 
 
-	
-	
-//	
-//	@Column(name="LAST_LOGIN")
-//	@UpdateTimestamp
-//	private Date lastLogin;
-	
+
 	//Extra constructor
-	public User( String username,String password) {
-		super();
-		this.username = username;
-		this.password = password;
-	}
+		public User( String username,String password) {
+			super();
+			this.username = username;
+			this.password = password;
+		}
 	
 }

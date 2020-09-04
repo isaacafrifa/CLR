@@ -22,8 +22,12 @@ public class MyUserDetailsService implements UserDetailsService
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		 User user= userRepository.findByUsername(username);
+		 
 		 if(user==null) throw new UsernameNotFoundException("User doesn't exist");
 		 
+		 //no need,check has been done in UserPrincipal class
+//		//checking isEnabled here
+//		 if(user.getIsAccountEnabled()!=1) throw new UsernameNotFoundException("User doesn't exist");	 
 		return new UserPrincipal(user);
 	}
 

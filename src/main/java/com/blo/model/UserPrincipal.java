@@ -1,30 +1,53 @@
 package com.blo.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.blo.entity.User;
 
-public class UserPrincipal implements UserDetails 
-{
+public class UserPrincipal implements UserDetails {
 
-	private User user; 
+	private User user;
+
 	public UserPrincipal(User user) {
 		this.user = user;
 	}
 	
+
+	// not using getEnum approach hence this method
+	// customized method to convert user's role from int to String
+	private String getUserRole(int userRole) {
+		if (userRole == 2) {
+			return RolesEnum.ROLE_ADMIN.name();
+		}
+		if (userRole == 3) {
+			return RolesEnum.ROLE_SYS_ADMIN.name();
+		}
+		return RolesEnum.ROLE_USER.name();
+	}
+
+	
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-	
+
 //		List<SimpleGrantedAuthority> authorities= new ArrayList<SimpleGrantedAuthority>();
-//		authorities.add(new SimpleGrantedAuthority(Role.ROLE_USER.toString()));
-//		authorities.add(new SimpleGrantedAuthority(Role.ROLE_ADMIN.toString()));
+//		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+//		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 //		return authorities;
-		
-		//making all principals as Role_Users for now
-		return Collections.singleton(new SimpleGrantedAuthority(Role.ROLE_USER.toString()));
+
+		// making all principals as Role_Users for now
+		// return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+
+		String userRole = getUserRole(user.getRole());
+
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(userRole));
+		return authorities;
 	}
 
 	@Override
@@ -55,10 +78,17 @@ public class UserPrincipal implements UserDetails
 		return true;
 	}
 
+	/*
+	 * Spring Security will automatically give
+	 * org.springframework.security.authentication.DisabledException: User is
+	 * disabled exception based on isEnabled() result.
+	 */
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
+		if (user.getIsAccountEnabled() == 1) {
+			return true;
+		}
+		return false;
 	}
 
 }

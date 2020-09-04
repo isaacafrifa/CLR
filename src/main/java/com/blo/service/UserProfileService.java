@@ -3,7 +3,6 @@ package com.blo.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,18 +37,26 @@ public class UserProfileService {
 	
 	@Transactional //hence revert changes if inserting to either tables fails
 	public UserProfile createUser(UserProfile userProfile) {
-		// create user object and set params with userProfile
-		User encryptedUser = new User();
-		encryptedUser.setUsername(userProfile.getUser().getUsername());
-		// encrypt password here
-		encryptedUser.setPassword(bCryptPasswordEncoder.encode(userProfile.getUser().getPassword()));
-
-		// set your user object to overwrite initial user param of userDetails
-		userProfile.setUser(encryptedUser);
+		//get userProfile's password and encrypt using your bCrpyt encoder
+		String encryptedPassword=bCryptPasswordEncoder.encode(userProfile.getUser().getPassword());	
+		// overwrite userProfile's password with encrypted password here
+		userProfile.getUser().setPassword(encryptedPassword);
+		
+		// setting userProfile's role to 1 by default
+		userProfile.getUser().setRole(1);
+	
 		return this.userProfileRepository.save(userProfile);
 
 	}
 
-
+	
+	@Transactional
+	public void deleteUserProfile(UserProfile userProfile) {
+		this.userProfileRepository.delete(userProfile);
+		
+	}
+	
+	
+	
 	
 }
