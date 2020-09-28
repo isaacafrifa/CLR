@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.blo.entity.User;
 import com.blo.entity.UserProfile;
 import com.blo.exception.UserNotFound;
 import com.blo.repository.UserProfileRepository;
@@ -54,6 +53,10 @@ public class UserProfileService {
 	public void deleteUserProfile(UserProfile userProfile) {
 		this.userProfileRepository.delete(userProfile);
 		
+	}
+	
+	public boolean emailExists(String email) {	
+		return userProfileRepository.existsByEmail(email);
 	}
 	
 	

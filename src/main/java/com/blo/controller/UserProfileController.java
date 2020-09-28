@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blo.entity.UserProfile;
+import com.blo.exception.EmailAlreadyExists;
 import com.blo.exception.UsernameAlreadyExists;
 import com.blo.service.UserProfileService;
 import com.blo.service.UserService;
@@ -26,7 +27,6 @@ import com.blo.service.UserService;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserProfileController {
-
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);
 	@Autowired
@@ -74,6 +74,11 @@ public class UserProfileController {
 		if (userService.usernameExists(userProfile.getUser().getUsername())) {
 			LOGGER.warn("USERNAME [" + userProfile.getUser().getUsername() + "] ALREADY EXISTS");
 			throw new UsernameAlreadyExists();
+		}
+		
+		if (userProfileService.emailExists(userProfile.getEmail())) {
+			LOGGER.warn("EMAIL [" + userProfile.getEmail() + "] ALREADY EXISTS");
+			throw new EmailAlreadyExists();
 		}
 		userProfileService.createUser(userProfile);
 		LOGGER.info("USER [DETAILS= " + userProfile + "] REGISTERED SUCCESSFULLY");

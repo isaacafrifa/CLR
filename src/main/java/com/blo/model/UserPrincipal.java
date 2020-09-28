@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.blo.entity.User;
+import com.blo.service.MyUserDetailsService;
 
 public class UserPrincipal implements UserDetails {
 
@@ -16,6 +19,8 @@ public class UserPrincipal implements UserDetails {
 	public UserPrincipal(User user) {
 		this.user = user;
 	}
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserPrincipal.class);
 	
 
 	// not using getEnum approach hence this method
@@ -88,6 +93,7 @@ public class UserPrincipal implements UserDetails {
 		if (user.getIsAccountEnabled() == 1) {
 			return true;
 		}
+		LOGGER.warn("USER[ "+user+" ] TRIED TO LOGIN BUT IS DISABLED");
 		return false;
 	}
 

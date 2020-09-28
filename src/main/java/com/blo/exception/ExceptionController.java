@@ -27,7 +27,14 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(UsernameAlreadyExists.class)
-	public ResponseEntity<APIError> handleUserAlreadyExistsException(UsernameAlreadyExists ex, WebRequest request) {
+	public ResponseEntity<APIError> handleUsernameAlreadyExistsException(UsernameAlreadyExists ex, WebRequest request) {
+		APIError errorDetails = new APIError(HttpStatus.CONFLICT.value(), ex.getMessage(), ex.getLocalizedMessage(),
+				request.getDescription(false) + "",LocalDateTime.now());
+		return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+	}
+	
+	@ExceptionHandler(EmailAlreadyExists.class)
+	public ResponseEntity<APIError> handleEmailAlreadyExistsException(EmailAlreadyExists ex, WebRequest request) {
 		APIError errorDetails = new APIError(HttpStatus.CONFLICT.value(), ex.getMessage(), ex.getLocalizedMessage(),
 				request.getDescription(false) + "",LocalDateTime.now());
 		return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);

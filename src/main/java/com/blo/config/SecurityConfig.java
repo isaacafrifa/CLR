@@ -1,11 +1,18 @@
 package com.blo.config;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,19 +20,26 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import com.blo.controller.UserController;
+import com.blo.exception.CustomAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //this LOC enables the @PreAuthorize annotation.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 	// not MyUserDetailsService
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -34,6 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoderBean() {
 		return new BCryptPasswordEncoder(10);
 	}
+	
+	//for my custom auth failure handler
+	 @Bean
+	    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+	        return new CustomAuthenticationFailureHandler();
+	    }
 
 	// for external auth
 	@Bean
@@ -49,7 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authProvider());
 	}
-
+	
+	//for custom Auth handler
 //	 @Bean
 //	    @Override
 //	    public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -62,30 +83,60 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http
-		.cors()
+	http
+		.cors() //enabling cors and using the CorsFilter bean provided
+		
+		//handling csrf
 		.and()
 		.csrf().disable() // CHANGE THIS LATER
+		
+		//handling requests
 		.authorizeRequests()
-		.antMatchers("/registration").permitAll()
+			.antMatchers("/registration").permitAll()
+			.antMatchers("/logout_success").permitAll()
 		.anyRequest().authenticated()
+		
+		//customizing login params
 		.and()
 		.formLogin()
-		.defaultSuccessUrl("/login-success", true) 
+		.defaultSuccessUrl("/login_success", true) 
+		//customizing login failure handler using my custom auth error handler
+		.failureHandler(customAuthenticationFailureHandler())
 		// .loginProcessingUrl("") //by default, loginProcessingUrl is "/login"
 		// .failureUrl("") //by default, failureUrl is http://localhost:8080/login?error
-		//  .and()
-		//	.logout()
+		
+		
+		//handling exceptions
+		.and()
+		.exceptionHandling()
+		.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point 
+		
+		//customizing logout params
+		.and()
+		.logout()
+		//using logoutSuccessHandler instead of logoutSuccessUrl
+		.logoutSuccessHandler(new LogoutSuccessHandler() {
+				@Override
+					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+							Authentication authentication) throws IOException, ServletException {
+					if(authentication!=null) {
+					LOGGER.info("USER [" + authentication.getName() + "] LOGGED OUT");
+					}
+					response.sendRedirect("/logout_success");
+					}
+				})
+	 	//.invalidateHttpSession(true) //by default, session is invalidated 
+		.deleteCookies("JSESSIONID") //delete JSESSIONID cookie after logout
+		.permitAll()
+	
 		// 	.logoutUrl("/perform_logout") //by default, logoutUrl is "/logout"
-		// 	.invalidateHttpSession(true)
-		// 	.deleteCookies("JSESSIONID")
 		//	.and()
-		//	.httpBasic() //use this when you're using http's basic auth
+		//	.httpBasic() //for http's basic auth
 		;
 
 //         http
 //		 .cors().and()
-//		 .csrf().disable() // will change this later
+//		 .csrf().disable() 
 //		 .authorizeRequests()
 //         .antMatchers("/**/*.{js,html,css}").permitAll()
 //         .antMatchers("/").permitAll()

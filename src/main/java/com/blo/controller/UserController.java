@@ -30,12 +30,11 @@ import com.blo.service.UserService;
 public class UserController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	private Map<String, Object> loggedInMap = new HashMap<>();
+	
 	private static final String LOGGED_IN_STATUS = "LOGGED_IN_STATUS";
 	private static final String LOGGED_IN_USER = "LOGGED_IN_USER";
-	
-	@Autowired
-	private UserService userService;
+	private static final String LOGGED_OUT_STATUS = "LOGGED_OUT_STATUS";
+
 
 //	 @Autowired
 //	    AuthenticationManager authenticationManager;
@@ -43,7 +42,7 @@ public class UserController {
 	@Autowired
 	MyUserDetailsService userDetailsService;
 
-	@GetMapping("/login-success")
+	@GetMapping("/login_success")
 	public ResponseUser currentUser(Authentication authentication) {
 		// using Authentication as the param instead of Principal, so I can customize my
 		// output
@@ -54,11 +53,20 @@ public class UserController {
 
 	}
 
+	@GetMapping("/logout_success")
+	public Map<String, Object> logout_success() {
+		Map<String, Object> map = new HashMap<>();
+		map.put(LOGGED_OUT_STATUS, "LOGGED_OUT");
+		return map;
+	}
+	
+
 	// method to check if user is logged in
 	@GetMapping("/authenticated")
 	public Map<String, Object> isLoggedIn(Authentication authentication) {
 		ResponseUser responseUser = new ResponseUser(authentication.getName(),
 				authentication.getAuthorities().toString());
+		Map<String, Object> loggedInMap = new HashMap<>();
 		loggedInMap.put(LOGGED_IN_STATUS, "LOGGED_IN");
 		loggedInMap.put(LOGGED_IN_USER, responseUser);
 		return loggedInMap;
@@ -82,6 +90,11 @@ public class UserController {
 //		
 //	}
 	
+//	@GetMapping("/logout")
+//	public String logout(Authentication authentication) {
+//		LOGGER.info("USER [" + authentication.getName() + "] IS ATTEMPTING LOGOUT");
+//		return authentication.getName()+" IS ATTEMPTING LOGOUT";
+//	}
 
 	
 ////

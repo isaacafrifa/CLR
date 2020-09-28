@@ -31,11 +31,12 @@ public class UserService {
 	}
 	
 	
-	public User createUser(User user) {
-		 user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-	      //  user.setRoles(new HashSet<>(roleRepository.findAll()));
-		return this.userRepository.save(user); 
-	}
+	//deprecated, I handled this functionality in UserProfile Service
+//	public User createUser(User user) {
+//		 user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+//	      //  user.setRoles(new HashSet<>(roleRepository.findAll()));
+//		return this.userRepository.save(user); 
+//	}
 	
 
 	public boolean usernameExists(String username) {	
