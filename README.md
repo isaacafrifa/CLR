@@ -1,4 +1,4 @@
-# BugTracker Backend #
+# Complete Login & Registration Backend #
 
 A spring boot powered backend for my Bug Tracker
 
@@ -20,7 +20,6 @@ Project is created with:
 * Maven
 * Spring Security 5
 * Zipkin (yet to be added)
-* Spring Cloud - Config Server & Sleuth (yet to be added)
 
 
 ### Features ###
