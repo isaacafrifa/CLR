@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blo.entity.UserProfile;
@@ -35,6 +36,7 @@ public class UserProfileController {
 	private UserService userService;
 	
 	
+	
 							/* GETS */
 	
 	@GetMapping(value="/profile/{username}")
@@ -43,6 +45,19 @@ public class UserProfileController {
 		UserProfile userProfile= userProfileService.findUserProfileByUsername(username);
 		return userProfile;
 	}
+	
+	
+	//Forgot Password Check
+	//using Request Params instead of @PathVariable
+	@GetMapping(value="/forgot_password")
+	public boolean isEmailExists(@RequestParam (value = "email") String emailAddress ){
+		LOGGER.info("FORGOT_PASSWORD'S EMAIL CHECK [ EMAIL ADDRESS=" + emailAddress + "]");
+		boolean emailExists = userProfileService.emailExists(emailAddress);
+		LOGGER.info("OUTPUT FROM FORGOT_PASSWORD'S EMAIL CHECK [EMAIL ADDRESS = "+emailAddress+"] IS => "+emailExists );
+		return emailExists;
+	}
+	
+	
 	
 	
 							/* POSTS */
@@ -84,6 +99,8 @@ public class UserProfileController {
 		LOGGER.info("USER [DETAILS= " + userProfile + "] REGISTERED SUCCESSFULLY");
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
+	
+	
 	
 	
 	
