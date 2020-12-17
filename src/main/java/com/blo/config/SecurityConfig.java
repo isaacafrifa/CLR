@@ -93,6 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//handling requests
 		.authorizeRequests()
 			.antMatchers("/registration").permitAll()
+			.antMatchers("/test").permitAll()
 			//.antMatchers("/forgot_password/*").permitAll() //because Im using /forgot_password?email=... now
 			.antMatchers("/forgot_password").permitAll()
 			.antMatchers("/logout_success").permitAll()

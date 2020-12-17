@@ -42,6 +42,11 @@ public class UserController {
 	@Autowired
 	MyUserDetailsService userDetailsService;
 
+	@GetMapping("/test")
+	public String test() {
+		return "test successful";
+	}
+	
 	@GetMapping("/login_success")
 	public ResponseUser currentUser(Authentication authentication) {
 		// using Authentication as the param instead of Principal, so I can customize my
