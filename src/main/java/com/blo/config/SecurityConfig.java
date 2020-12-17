@@ -1,6 +1,7 @@
 package com.blo.config;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -164,7 +165,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// fail with 403 Invalid CORS request
 		// Preflight OPTIONS requests are always sent when Content-Type of the Request
 		// is JSON
-		config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+		
+	//	config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); //commented out to make provision for heroku build that uses Java v1.8
+		List<String> allowedHeaders= new ArrayList<String>();
+		allowedHeaders.add("Authorization");
+		allowedHeaders.add("Cache-Control");
+		allowedHeaders.add("Content-Type");
+		config.setAllowedHeaders(allowedHeaders);
 		config.addAllowedMethod("OPTIONS");
 		config.addAllowedMethod("HEAD");
 		config.addAllowedMethod("GET");
