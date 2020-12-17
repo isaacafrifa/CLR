@@ -31,8 +31,6 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import com.blo.controller.UserController;
 import com.blo.exception.CustomAuthenticationFailureHandler;
 
 @Configuration
@@ -41,6 +39,8 @@ import com.blo.exception.CustomAuthenticationFailureHandler;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
+
+	
 	// not MyUserDetailsService
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -64,6 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 provider.setPasswordEncoder(passwordEncoderBean());
 		return provider;
 	}
+	
+	
 
 	// insert your auth bean into authManagerBuilder
 	@Override
@@ -155,6 +157,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public CorsFilter corsFilter() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		final CorsConfiguration config = new CorsConfiguration();
+		final List<String> allowedHeaders= new ArrayList<String>();
 		config.setAllowCredentials(true);
 		config.addAllowedOrigin("http://localhost:3000"); // this allows this origin
 		
@@ -165,9 +168,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// fail with 403 Invalid CORS request
 		// Preflight OPTIONS requests are always sent when Content-Type of the Request
 		// is JSON
-		
-	//	config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); //commented out to make provision for heroku build that uses Java v1.8
-		List<String> allowedHeaders= new ArrayList<String>();
+	
+		/*
+		 * commented out so heroku(which uses Java v1.8) can build, workaround provided below
+		 */
+	//	config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); 
 		allowedHeaders.add("Authorization");
 		allowedHeaders.add("Cache-Control");
 		allowedHeaders.add("Content-Type");

@@ -43,6 +43,7 @@ public class UserProfileService {
 		
 		// setting userProfile's role to 1 by default
 		userProfile.getUser().setRole(1);
+		userProfile.getUser().setIsAccountEnabled(1);
 	
 		return this.userProfileRepository.save(userProfile);
 
