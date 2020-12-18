@@ -1,6 +1,6 @@
 # Complete Login & Registration Backend #
 
-A spring boot powered backend for my Bug Tracker
+A spring boot powered backend for authentication.
 
 ## Table of contents
 * [General info](#general-info)
@@ -9,8 +9,8 @@ A spring boot powered backend for my Bug Tracker
 
 ### General Info ###
 
-* This project serves a backend for my Bug Tracker (React App). This application uses a monolith architecture.
-* This project is as at now strictly for *demo* purposes and will be used be published on heroku soon.
+* This project is the backend for my`CLR app` (React JS App). You can check out the frontend in my repo. This application uses a monolith architecture.
+* This project is as at now strictly for *demo* purposes and is live on heroku.
 * Version : v1
 
 ### Technologies ###
@@ -24,22 +24,24 @@ Project is created with:
 
 ### Features ###
  The project for now has the following features: 
+
 * Authentication
 * Authorization
 
 
 ### User Stories ###
  The project for now has the following: 
+
 * As a user, I want register so that will be authorized by an Admin User.
 * As an authorized user, I want to login so that I can access my dahsboard.
 
 ### Future Additions
-
+* Email validation during registration
 
 ### Credits ###
-* 
+* N/A
 
 
 ### Who do I talk to? ###
-* Repo owner : Yaw Afrifa
+* Repo owner : `isaac.afrifa3@yahoo.com`
 
