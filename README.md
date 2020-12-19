@@ -9,7 +9,7 @@ A spring boot powered backend for authentication.
 
 ### General Info ###
 
-* This project is the backend for my`CLR app` (React JS App). You can check out the frontend in my repo. This application uses a monolith architecture.
+* This project is the backend for my`CLR app` (ReactJS App). You can check out the frontend in my repo. This application uses a monolith architecture.
 * This project is as at now strictly for *demo* purposes and is live on heroku.
 * Version : v1
 

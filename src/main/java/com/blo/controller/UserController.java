@@ -49,8 +49,8 @@ public class UserController {
 	
 	@GetMapping("/login_success")
 	public ResponseUser currentUser(Authentication authentication) {
-		// using Authentication as the param instead of Principal, so I can customize my
-		// output
+		// using Authentication as the param instead of Principal, so I can customize my output
+		LOGGER.info("LOGIN_SUCCESS ENDPOINT HAS BEEN HIT");
 		ResponseUser responseUser = new ResponseUser(authentication.getName(),
 				authentication.getAuthorities().toString());
 		LOGGER.info("USER [" + responseUser + "] LOGGED IN SUCCESSFULLY");
