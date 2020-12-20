@@ -159,7 +159,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		final CorsConfiguration config = new CorsConfiguration();
 		final List<String> allowedHeaders= new ArrayList<String>();
 		config.setAllowCredentials(true);
-		config.addAllowedOrigin("https://myclr.netlify.app"); // this allows this origin
+		//config.addAllowedOrigin("https://myclr.netlify.app"); // this allows this origin
+		config.addAllowedOrigin("*"); 
 		
 		//config.addAllowedOrigin("*"); // this allows all origins
 		// config.addAllowedHeader("*"); // this allows all headers
