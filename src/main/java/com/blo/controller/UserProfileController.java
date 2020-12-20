@@ -26,7 +26,7 @@ import com.blo.service.UserProfileService;
 import com.blo.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class UserProfileController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);

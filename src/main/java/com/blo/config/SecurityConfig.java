@@ -159,8 +159,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		final CorsConfiguration config = new CorsConfiguration();
 		final List<String> allowedHeaders= new ArrayList<String>();
 		config.setAllowCredentials(true);
-		//config.addAllowedOrigin("https://myclr.netlify.app"); // this allows this origin
-		config.addAllowedOrigin("*"); 
+		config.addAllowedOrigin("https://myclr.netlify.app"); // this allows this origin
 		
 		//config.addAllowedOrigin("*"); // this allows all origins
 		// config.addAllowedHeader("*"); // this allows all headers
@@ -171,7 +170,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// is JSON
 	
 		/*
-		 * commented out so heroku(which uses Java v1.8) can build, workaround provided below
+		 * commented out so heroku(which uses Java v1.8) can build successfully, workaround provided below
 		 */
 	//	config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); 
 		allowedHeaders.add("Authorization");

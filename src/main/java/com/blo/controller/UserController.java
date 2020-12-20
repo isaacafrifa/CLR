@@ -25,7 +25,7 @@ import com.blo.service.MyUserDetailsService;
 import com.blo.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
