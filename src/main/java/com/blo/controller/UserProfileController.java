@@ -26,7 +26,7 @@ import com.blo.service.UserProfileService;
 import com.blo.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "https://myclr.netlify.app")
+//@CrossOrigin(origins = "https://myclr.netlify.app")
 public class UserProfileController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);

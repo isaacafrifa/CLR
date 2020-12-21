@@ -25,7 +25,7 @@ import com.blo.service.MyUserDetailsService;
 import com.blo.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "https://myclr.netlify.app")
+//@CrossOrigin(origins = "https://myclr.netlify.app")
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 

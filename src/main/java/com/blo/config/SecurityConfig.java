@@ -159,9 +159,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		final CorsConfiguration config = new CorsConfiguration();
 		final List<String> allowedHeaders= new ArrayList<String>();
 		config.setAllowCredentials(true);
-		config.addAllowedOrigin("https://myclr.netlify.app"); // this allows this origin
+		//config.addAllowedOrigin("https://myclr.netlify.app"); // this allows this origin
 		
-		//config.addAllowedOrigin("*"); // this allows all origins
+		config.addAllowedOrigin("*"); // this allows all origins
 		// config.addAllowedHeader("*"); // this allows all headers
 
 		// setAllowedHeaders is important! Without it, OPTIONS preflight request will
