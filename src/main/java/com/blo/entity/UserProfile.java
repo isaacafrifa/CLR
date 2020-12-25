@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "bugtracker_user_profile")
+@Table(name = "clr_user_profile")
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfile {

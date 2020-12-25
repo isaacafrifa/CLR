@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "bugtracker_login")
+@Table(name = "clr_login")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -52,9 +52,9 @@ public class User {
 	@Column(name="ENABLED")
 	private int isAccountEnabled;
 
-	@Column(name="LAST_LOGIN")
+	@Column(name="UPDATED_ON")
 	@UpdateTimestamp
-	private Date lastLogin;
+	private Date updatedOn;
 	
 
 	@Column(name = "ROLE")
