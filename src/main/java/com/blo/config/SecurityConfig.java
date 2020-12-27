@@ -105,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//customizing login params
 		.and()
 		.formLogin()
-		.defaultSuccessUrl("/test", true) 
+		.defaultSuccessUrl("/login_success", true) 
 		//customizing login failure handler using my custom auth error handler
 		.failureHandler(customAuthenticationFailureHandler())
 		// .loginProcessingUrl("") //by default, loginProcessingUrl is "/login"
