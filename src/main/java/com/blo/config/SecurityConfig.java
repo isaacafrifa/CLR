@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
 	
-	// not MyUserDetailsService
+	//not MyUserDetailsService
 	@Autowired
 	private UserDetailsService userDetailsService;
 
