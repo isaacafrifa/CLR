@@ -55,6 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
 	        return new CustomAuthenticationFailureHandler();
 	    }
+		//for my custom auth success handler
+	 @Bean
+	 public AuthenticationSuccessHandler customAuthenticationSuccessHandler(){
+	      return new AuthenticationSuccessHandler();
+	 }
 
 	// for external auth
 	@Bean
@@ -102,12 +107,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/logout_success").permitAll()
 		.anyRequest().authenticated()
 		
+		
 		//customizing login params
 		.and()
 		.formLogin()
-		.defaultSuccessUrl("/login_success", true) 
-		//customizing login failure handler using my custom auth error handler
-		.failureHandler(customAuthenticationFailureHandler())
+		//.defaultSuccessUrl("/login_success", true) //commented because the redirect function associated with defaultSuccessUrl is problematic so I created my custom handler
+		.successHandler(customAuthenticationSuccessHandler()) //customizing login success handler using my custom auth success handler		
+		.failureHandler(customAuthenticationFailureHandler()) //customizing login failure handler using my custom auth error handler
 		// .loginProcessingUrl("") //by default, loginProcessingUrl is "/login"
 		// .failureUrl("") //by default, failureUrl is http://localhost:8080/login?error
 		
@@ -116,6 +122,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.exceptionHandling()
 		.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point 
+		
 		
 		//customizing logout params
 		.and()
