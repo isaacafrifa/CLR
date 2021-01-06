@@ -135,7 +135,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 							Authentication authentication) throws IOException, ServletException {
 					if(authentication!=null) {
-					LOGGER.info("USER [" + authentication.getName() + "] LOGGED OUT");
+					LOGGER.info("USER [" + authentication.getName() + "] LOGGED OUT WITH IP ADDRESS [ "+request.getRemoteAddr()+" ]");
 					}
 					response.sendRedirect("/logout_success");
 					}
