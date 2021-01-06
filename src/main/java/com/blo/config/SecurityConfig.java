@@ -123,7 +123,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//handling exceptions
 		.and()
 		.exceptionHandling()
-		.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point 
+		.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point --modify later using custom AuthEntryPoint
 		
 		
 		//customizing logout params
