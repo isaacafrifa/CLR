@@ -28,10 +28,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import com.blo.exception.CustomAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -57,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    }
 		//for my custom auth success handler
 	 @Bean
-	 public AuthenticationSuccessHandler customAuthenticationSuccessHandler(){
-	      return new AuthenticationSuccessHandler();
+	 public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler(){
+	      return new CustomAuthenticationSuccessHandler();
 	 }
 
 	// for external auth
@@ -96,7 +96,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		//handling csrf
 		.and()
-		.csrf().disable() // CHANGE THIS LATER
+		.csrf().disable()
+		//csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // CHANGE THIS LATER
+		//.and()
 		
 		//handling requests
 		.authorizeRequests()

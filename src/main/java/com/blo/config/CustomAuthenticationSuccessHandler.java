@@ -13,24 +13,23 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import com.blo.model.ResponseUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+/*
+ * This is my custom authentication success handler class
+ */
+public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationSuccessHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationSuccessHandler.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
-		
-		if (request == null) {
-			LOGGER.info("AUTHENTICATION SUCCESS HANDLER HAS BEEN HIT");
-		}
-		
-		LOGGER.info(request.getRemoteAddr() + " HAS HIT AUTHENTICATION SUCCESS HANDLER");
+
+		// attaching request's ip address to log
+		LOGGER.info("IP ADDRESS [ "+request.getRemoteAddr() + " ] HAS HIT AUTHENTICATION SUCCESS HANDLER");
 		ResponseUser responseUser = new ResponseUser(authentication.getName(),
 				authentication.getAuthorities().toString());
-		LOGGER.info("USER [" + responseUser + "] LOGGED IN SUCCESSFULLY");
+		LOGGER.info("USER [" + responseUser + "] LOGGED IN SUCCESSFULLY WITH IP ADDRESS [ "+request.getRemoteAddr() +" ]");
 
-		// return responseUser;
 		response.getOutputStream().println(objectMapper.writeValueAsString(responseUser));
 
 	}

@@ -8,11 +8,11 @@ image: maven:3.6.1
 pipelines:
   default:
     - step:
-        name: Clean and test 
+        name: Clean and build
         caches:
           - maven
         script: # Modify the commands below to build your repository.
-          - mvn -B clean verify # -B batch mode makes Maven less verbose
+          - mvn -B clean package -Dspring.datasource.username= $USRN # -B batch mode makes Maven less verbose
     - step:
         name: Create artifact
         script: #Create a compressed gzip archive file(application.tar.gz) of pom and src
