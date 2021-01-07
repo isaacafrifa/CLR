@@ -96,14 +96,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		//handling csrf
 		.and()
-		.csrf().disable()
-		//csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // CHANGE THIS LATER
-		//.and()
+		.csrf()//.disable()
+		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) 
+		.and()
 		
 		//handling requests
 		.authorizeRequests()
 			.antMatchers("/registration").permitAll()
 			.antMatchers("/test").permitAll()
+			.antMatchers("/api/csrf").permitAll()
 			//.antMatchers("/forgot_password/*").permitAll() //because Im using /forgot_password?email=... now
 			.antMatchers("/forgot_password").permitAll()
 			.antMatchers("/logout_success").permitAll()

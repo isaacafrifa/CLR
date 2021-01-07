@@ -60,20 +60,30 @@ public class UserController {
 
 	@GetMapping("/logout_success")
 	public Map<String, Object> logout_success() {
+		LOGGER.info("LOGOUT_SUCCESS ENDPOINT HAS BEEN HIT");
 		Map<String, Object> map = new HashMap<>();
 		map.put(LOGGED_OUT_STATUS, "LOGGED_OUT");
 		return map;
 	}
 	
 
+	// method to get CSRF token
+		@GetMapping("/api/csrf")
+		public String getCSRF() {
+			return "CSRF Protected";
+		}
+		
+		
 	// method to check if user is logged in
 	@GetMapping("/authenticated")
 	public Map<String, Object> isLoggedIn(Authentication authentication) {
+		
 		ResponseUser responseUser = new ResponseUser(authentication.getName(),
 				authentication.getAuthorities().toString());
 		Map<String, Object> loggedInMap = new HashMap<>();
 		loggedInMap.put(LOGGED_IN_STATUS, "LOGGED_IN");
 		loggedInMap.put(LOGGED_IN_USER, responseUser);
+		LOGGER.info("USER [" + responseUser + "] HIT \"../authenticated\" ENDPOINT AND IS AUTHENTICATED");
 		return loggedInMap;
 	}
 
