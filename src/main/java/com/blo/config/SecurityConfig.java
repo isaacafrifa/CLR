@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 
 	 //for my custom authEntryPoint
 	 @Bean
-	    private CustomAuthenticationEntryPoint authenticationEntryPoint() {
+	 public CustomAuthenticationEntryPoint authenticationEntryPoint() {
 		 return new CustomAuthenticationEntryPoint();
 		 }
 	 
