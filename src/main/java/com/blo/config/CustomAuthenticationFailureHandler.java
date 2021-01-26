@@ -13,12 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /*
  * This is my custom authentication failure handler class
  */
+@Component
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationFailureHandler.class);
@@ -39,7 +41,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 //	        data.put(
 //	          "Timestamp", 
 //	          LocalDateTime.now());
-	        LOGGER.warn(request.getRemoteAddr()+ " CANNOT AUTHENTICATE [ EXCEPTION : "+exception.getMessage()+" ]");
+	        LOGGER.warn(request.getRemoteAddr()+ " CANNOT AUTHENTICATE [ EXCEPTION MESSAGE: "+exception.getMessage()+" ]");
 	      
 	        response.getOutputStream()
 	          .println(objectMapper.writeValueAsString(data));

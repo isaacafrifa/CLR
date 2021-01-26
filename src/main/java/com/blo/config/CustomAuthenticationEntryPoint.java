@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationEntryPoint.class);
 
@@ -25,7 +27,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 		response.addHeader("WWW-Authenticate", "Realm =  Afrifa");
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		
-		LOGGER.warn(request.getRemoteAddr() + " RECEIVED A HTTP STATUS 401 [ EXCEPTION : " + authException.getMessage()
+		LOGGER.warn(request.getRemoteAddr() + " RECEIVED A HTTP STATUS 401 [ EXCEPTION MESSAGE: " + authException.getMessage()
 				+ " ]");
 
 		PrintWriter writer = response.getWriter();
