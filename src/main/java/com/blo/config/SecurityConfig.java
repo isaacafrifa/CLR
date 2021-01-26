@@ -51,21 +51,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	//for my custom auth failure handler
-	 @Bean
-	    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
-	        return new CustomAuthenticationFailureHandler();
-	    }
+	 @Autowired
+	    public AuthenticationFailureHandler customAuthenticationFailureHandler;
 		//for my custom auth success handler
-	 @Bean
-	 public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler(){
-	      return new CustomAuthenticationSuccessHandler();
-	 }
+	 @Autowired
+	 public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 	 
 	 //for my custom authEntryPoint
-	 @Bean
-	 public CustomAuthenticationEntryPoint authenticationEntryPoint() {
-		 return new CustomAuthenticationEntryPoint();
-		 }
+	 @Autowired
+	 public CustomAuthenticationEntryPoint authenticationEntryPoint;
 	 
 	// for external auth
 	@Bean
@@ -121,8 +115,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.formLogin()
 		//.defaultSuccessUrl("/login_success", true) //commented because the redirect function associated with defaultSuccessUrl is problematic so I created my custom handler
-		.successHandler(customAuthenticationSuccessHandler()) //customizing login success handler using my custom auth success handler		
-		.failureHandler(customAuthenticationFailureHandler()) //customizing login failure handler using my custom auth error handler
+		.successHandler(customAuthenticationSuccessHandler) //customizing login success handler using my custom auth success handler		
+		.failureHandler(customAuthenticationFailureHandler) //customizing login failure handler using my custom auth error handler
 		// .loginProcessingUrl("") //by default, loginProcessingUrl is "/login"
 		// .failureUrl("") //by default, failureUrl is http://localhost:8080/login?error
 		
@@ -131,7 +125,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.exceptionHandling()
 		//.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point --commented because I am using custom AuthEntryPoint
-		.authenticationEntryPoint(authenticationEntryPoint())
+		.authenticationEntryPoint(authenticationEntryPoint)
 		
 		//customizing logout params
 		.and()
