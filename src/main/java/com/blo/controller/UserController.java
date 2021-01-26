@@ -27,6 +27,7 @@ import com.blo.service.UserService;
 @RestController
 //@CrossOrigin(origins = "https://myclr.netlify.app")
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(allowCredentials = "true") //will add Access-Control-Allow-Credentials: true to every server's response header, which is needed for the client to read the cookies
 public class UserController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -35,9 +36,6 @@ public class UserController {
 	private static final String LOGGED_IN_USER = "LOGGED_IN_USER";
 	private static final String LOGGED_OUT_STATUS = "LOGGED_OUT_STATUS";
 
-
-//	 @Autowired
-//	    AuthenticationManager authenticationManager;
 
 	@Autowired
 	MyUserDetailsService userDetailsService;
@@ -111,40 +109,6 @@ public class UserController {
 //		return authentication.getName()+" IS ATTEMPTING LOGOUT";
 //	}
 
-	
-////
-////	using spring security's default "/login" endpoint hence below method not needed
-////	@PostMapping(value = "/authenticate")
-////	public ResponseEntity<?> createAuthenticationToken(@RequestBody User authenticationRequest) throws Exception 
-////	{
-////		//@RequestBody  User authenticationRequest
-////		//@ModelAttribute for Multipart form instead of @RequestBody for json
-////		//@RequestParam to extract query parameters, form parameters, and even files from the request.
-////		//@RequestParam(name = "username") String username, @RequestParam String password
-////		
-////		LOGGER.error("--------->we are in the method");
-////		//User authenticationRequest=new User(username, password);
-////		authenticate(authenticationRequest.getUsername(), 
-////		authenticationRequest.getPassword());
-////		
-////		UserDetails userPrincipal = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-////		//JwtUserDetails userDetails = new JwtUserDetails();
-////		//userDetails.setUsername(authenticationRequest.getUsername());
-////		return ResponseEntity.ok(userPrincipal);	
-////			
-//////		final String token = jwtTokenUtil.generateToken(userDetails);
-//////		return ResponseEntity.ok(new JwtResponse(token));
-////	}
-////	
-////	private void authenticate(String username, String password) throws Exception {
-////		try {
-////			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-////		} catch (DisabledException e) {
-////			throw new Exception("USER_DISABLED", e);
-////		} catch (BadCredentialsException e) {
-////			throw new Exception("INVALID_CREDENTIALS", e);
-////		}
-//	
-//}
+
 	
 }

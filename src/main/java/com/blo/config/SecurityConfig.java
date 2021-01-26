@@ -150,16 +150,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//	.httpBasic() //for http's basic auth
 		;
 
-//         http
-//		 .cors().and()
-//		 .csrf().disable() 
-//		 .authorizeRequests()
-//         .antMatchers("/**/*.{js,html,css}").permitAll()
-//         .antMatchers("/").permitAll()
-//         .anyRequest().authenticated()
-//         .and()
-//         .httpBasic()
-//         ;
+
 
 	}
 
