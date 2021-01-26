@@ -60,6 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler(){
 	      return new CustomAuthenticationSuccessHandler();
 	 }
+	 
+	 //for my custom authEntryPoint
+	 @Autowired
+	    private CustomAuthenticationEntryPoint authenticationEntryPoint;
 
 	// for external auth
 	@Bean
@@ -124,8 +128,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//handling exceptions
 		.and()
 		.exceptionHandling()
-		.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point --modify later using custom AuthEntryPoint
-		
+		//.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point --modify later using custom AuthEntryPoint
+		.authenticationEntryPoint(authenticationEntryPoint)
 		
 		//customizing logout params
 		.and()
