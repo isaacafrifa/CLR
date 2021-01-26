@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,7 +25,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
@@ -62,9 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 }
 	 
 	 //for my custom authEntryPoint
-	 @Autowired
-	    private CustomAuthenticationEntryPoint authenticationEntryPoint;
-
+	 @Bean
+	    private CustomAuthenticationEntryPoint authenticationEntryPoint() {
+		 return new CustomAuthenticationEntryPoint();
+		 }
+	 
 	// for external auth
 	@Bean
 	public AuthenticationProvider authProvider() {
@@ -128,8 +128,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//handling exceptions
 		.and()
 		.exceptionHandling()
-		//.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point --modify later using custom AuthEntryPoint
-		.authenticationEntryPoint(authenticationEntryPoint)
+		//.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //outputs 401 at entry point --commented because I am using custom AuthEntryPoint
+		.authenticationEntryPoint(authenticationEntryPoint())
 		
 		//customizing logout params
 		.and()
