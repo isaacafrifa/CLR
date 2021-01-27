@@ -163,7 +163,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		config.addAllowedOrigin("https://myclr.netlify.app"); // this allows this origin
 		
 		//config.addAllowedOrigin("*"); // this allows all origins
-		 config.addAllowedHeader("*"); // this allows all headers
+		// config.addAllowedHeader("*"); // this allows all headers
 
 		// setAllowedHeaders is important! Without it, OPTIONS preflight request will
 		// fail with 403 Invalid CORS request
@@ -178,7 +178,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		allowedHeaders.add("Cache-Control");
 		allowedHeaders.add("Content-Type");
 		allowedHeaders.add("x-xsrf-token"); 
-		//config.setAllowedHeaders(allowedHeaders);
+		config.setAllowedHeaders(allowedHeaders);
 		config.addAllowedMethod("OPTIONS");
 		config.addAllowedMethod("HEAD");
 		config.addAllowedMethod("GET");
