@@ -3,6 +3,7 @@ package com.blo.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -66,7 +67,8 @@ public class UserController {
 
 	// method to get CSRF token
 		@GetMapping("/api/csrf")
-		public String getCSRF() {
+		public String getCSRF(HttpServletResponse res) {
+			res.setHeader("Set-Cookie", "mycookie=hello; Secure; HttpOnly; SameSite=None; Path=/; ");
 			return "CSRF Protected";
 		}
 		
