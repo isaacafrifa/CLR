@@ -68,9 +68,9 @@ public class UserController {
 	// method to get CSRF token
 		@GetMapping("/api/csrf")
 		public String getCSRF(HttpServletResponse res) {
-			res.setHeader("Set-Cookie", "mycookie=hello; Secure; HttpOnly; SameSite=None; Path=/; ");
-			return "CSRF Protected";
-		}
+			res.setHeader("Set-Cookie", "XSRF-TOKEN = hello; Secure; HttpOnly; SameSite=None; Path=/; ");
+ 			return "CSRF Protected";
+ 		}
 		
 		
 	// method to check if user is logged in
