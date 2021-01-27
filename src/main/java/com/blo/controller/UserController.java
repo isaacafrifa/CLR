@@ -25,9 +25,8 @@ import com.blo.service.MyUserDetailsService;
 import com.blo.service.UserService;
 
 @RestController
-//@CrossOrigin(origins = "https://myclr.netlify.app")
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
-@CrossOrigin(origins = "https://myclr.netlify.app", allowCredentials = "true") //will add Access-Control-Allow-Credentials: true to every server's response header, which is needed for the client to read the cookies
+//@CrossOrigin(allowCredentials = "true") //will add Access-Control-Allow-Credentials: true to every server's response header, which is needed for the client to read the cookies
 public class UserController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
