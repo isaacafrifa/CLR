@@ -45,10 +45,11 @@ public class UserController {
 	}
 
 	@GetMapping("/logout_success")
-	public Map<String, Object> logout_success() {
+	public Map<String, Object> logout_success(Authentication authentication) {
 		LOGGER.info("LOGOUT_SUCCESS ENDPOINT HAS BEEN HIT");
 		Map<String, Object> map = new HashMap<>();
 		map.put(LOGGED_OUT_STATUS, "LOGGED_OUT");
+		LOGGER.info("USER [ USERNAME= " + authentication.getName() + "] HAS HIT LOGOUT_SUCCESS ENDPOINT");
 		return map;
 	}
 	

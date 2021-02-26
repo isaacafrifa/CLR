@@ -53,36 +53,6 @@ public class ForgotPasswordController {
 	
 	
 	
-	
-	
-	
-	@PostMapping("/reset_password")
-	public GenericResponse processResetPassword( HttpServletRequest request , @RequestParam(value = "token") String token,
-			@RequestParam(value = "password") String newPassword) {	
-		
-		//String pass= request.getParameter("password");
-		LOGGER.info("PROCESSING RESET PASSWORD");
-		LOGGER.info("CHECKING RESET PASSWORD TOKEN VALIDITY [ TOKEN = "+token+" ]");
-		
-		//checking token validity
-		UserProfile userProfile = userProfileService.getByResetPasswordToken(token);
-		if (userProfile == null) {
-			LOGGER.warn("RESET TOKEN = [ "+token+" ] IS INVALID");
-			return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Invalid Reset Token");
-		}
-		
-	    LOGGER.info("RESET TOKEN = [ "+token+" ] IS VALID");
-	    //update with new password
-		LOGGER.info("RESETTING PASSWORD OF USER = [ "+userProfile.getEmail()+" ]");
-	    UserProfile updatedUser =userProfileService.updatePassword(userProfile, newPassword);
-	    if(updatedUser == null) {
-	    	LOGGER.warn("RESETTING PASSWORD [ USER = "+userProfile.getEmail()+" ] FAILED");
-	    	return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Password Reset Failed");
-	    }
-	    
-		LOGGER.info("RESETTING PASSWORD OF USER = [ "+userProfile.getEmail()+" ] SUCCESSFUL");
-		return new GenericResponse(OperationsEnum.SUCCESSFUL_OPERATION.toString(),null);
-	}
 
 	
 	@PostMapping(value = "/forgot_password")
@@ -112,6 +82,34 @@ public class ForgotPasswordController {
 		return new GenericResponse(OperationsEnum.SUCCESSFUL_OPERATION.toString(),null);
 	}
 
+	
+	@PostMapping("/reset_password")
+	public GenericResponse processResetPassword( HttpServletRequest request , @RequestParam(value = "token") String token,
+			@RequestParam(value = "password") String newPassword) {	
+		
+		//String pass= request.getParameter("password");
+		LOGGER.info("PROCESSING RESET PASSWORD");
+		LOGGER.info("CHECKING RESET PASSWORD TOKEN VALIDITY [ TOKEN = "+token+" ]");
+		
+		//checking token validity
+		UserProfile userProfile = userProfileService.getByResetPasswordToken(token);
+		if (userProfile == null) {
+			LOGGER.warn("RESET TOKEN = [ "+token+" ] IS INVALID");
+			return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Invalid Reset Token");
+		}
+		
+	    LOGGER.info("RESET TOKEN = [ "+token+" ] IS VALID");
+	    //update with new password
+		LOGGER.info("RESETTING PASSWORD OF USER = [ "+userProfile.getEmail()+" ]");
+	    UserProfile updatedUser =userProfileService.updatePassword(userProfile, newPassword);
+	    if(updatedUser == null) {
+	    	LOGGER.warn("RESETTING PASSWORD [ USER = "+userProfile.getEmail()+" ] FAILED");
+	    	return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Password Reset Failed");
+	    }
+	    
+		LOGGER.info("RESETTING PASSWORD OF USER = [ "+userProfile.getEmail()+" ] IS SUCCESSFUL");
+		return new GenericResponse(OperationsEnum.SUCCESSFUL_OPERATION.toString(),null);
+	}
 	
 	
 	
