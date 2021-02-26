@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,12 +25,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import com.blo.model.Constants;
 
 @Configuration
 @EnableWebSecurity
@@ -104,12 +103,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 			.antMatchers("/registration").permitAll()
 			.antMatchers("/test").permitAll()
-			.antMatchers("/api/csrf").permitAll()
+			//.antMatchers("/api/csrf").permitAll() //because csrf is disabled
 			//.antMatchers("/forgot_password/*").permitAll() //because Im using /forgot_password?email=... now
 			.antMatchers("/forgot_password").permitAll()
+			.antMatchers("/reset_password").permitAll() 
+			.antMatchers("/reset_password/check_token").permitAll()
 			.antMatchers("/logout_success").permitAll()
 		.anyRequest().authenticated()
-		
 		
 		//customizing login params
 		.and()
@@ -136,7 +136,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 							Authentication authentication) throws IOException, ServletException {
 					if(authentication!=null) {
-					LOGGER.info("USER [" + authentication.getName() + "] LOGGED OUT WITH IP ADDRESS [ "+request.getRemoteAddr()+" ]");
+					LOGGER.info("USER [ USERNAME= " + authentication.getName() + "] LOGGED OUT WITH IP ADDRESS [ "+request.getRemoteAddr()+" ]");
 					}
 					response.sendRedirect("/logout_success");
 					}
@@ -160,9 +160,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		final CorsConfiguration config = new CorsConfiguration();
 		final List<String> allowedHeaders= new ArrayList<String>();
 		config.setAllowCredentials(true);
-		config.addAllowedOrigin("https://myclr.netlify.app"); // this allows this origin
+		config.addAllowedOrigin(Constants.ALLOWED_ORIGIN); // this allows this origin
 		
-		//config.addAllowedOrigin("*"); // this allows all origins
+		// config.addAllowedOrigin("*"); // this allows all origins
 		 config.addAllowedHeader("*"); // this allows all headers
 
 		// setAllowedHeaders is important! Without it, OPTIONS preflight request will
@@ -170,9 +170,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// Preflight OPTIONS requests are always sent when Content-Type of the Request
 		// is JSON
 	
-		/*
-		 * commented out so heroku(which uses Java v1.8) can build successfully, workaround provided below
-		 */
+		/* commented out cos heroku(which uses Java v1.8) can build successfully, workaround provided below */
 	//	config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); 
 		allowedHeaders.add("Authorization");
 		allowedHeaders.add("Cache-Control");

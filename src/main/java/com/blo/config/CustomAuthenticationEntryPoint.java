@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,12 +21,12 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 			AuthenticationException authException) throws IOException {
 
 		// attaching request's ip address to log
-		LOGGER.warn(request.getRemoteAddr() + " HAS HIT AUTHENTICATION ENTRY POINT");
+		LOGGER.warn("IP ADDRESS ["+request.getRemoteAddr() + "] HAS HIT AUTHENTICATION ENTRY POINT");
 		
 		response.addHeader("WWW-Authenticate", "Realm =  Afrifa");
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		
-		LOGGER.warn(request.getRemoteAddr() + " RECEIVED A HTTP STATUS 401 [ EXCEPTION MESSAGE: " + authException.getMessage()
+		LOGGER.warn("IP ADDRESS ["+request.getRemoteAddr() + "] RECEIVED A HTTP STATUS 401 [ EXCEPTION MESSAGE: " + authException.getMessage()
 				+ " ]");
 
 		PrintWriter writer = response.getWriter();

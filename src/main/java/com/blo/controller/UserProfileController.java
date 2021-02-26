@@ -10,13 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blo.entity.UserProfile;
@@ -35,51 +33,45 @@ public class UserProfileController {
 	@Autowired
 	private UserService userService;
 	
-	
-	
-							/* GETS */
-	
-	@GetMapping(value="/profile/{username}")
-	public UserProfile getProfile(@PathVariable (value = "username") String username ){
+
+								/* GETS */
+
+	@GetMapping(value = "/profile/{username}")
+	public UserProfile getProfile(@PathVariable(value = "username") String username) {
 		LOGGER.info("GETTING USER PROFILE WITH [USERNAME=" + username + "]");
-		UserProfile userProfile= userProfileService.findUserProfileByUsername(username);
+		UserProfile userProfile = userProfileService.findUserProfileByUsername(username);
 		return userProfile;
 	}
-	
-	
-	//Forgot Password Check
-	//using Request Params instead of @PathVariable
-	@GetMapping(value="/forgot_password")
-	public boolean isEmailExists(@RequestParam (value = "email") String emailAddress ){
-		LOGGER.info("FORGOT_PASSWORD'S EMAIL CHECK [ EMAIL ADDRESS=" + emailAddress + "]");
-		boolean emailExists = userProfileService.emailExists(emailAddress);
-		LOGGER.info("OUTPUT FROM FORGOT_PASSWORD'S EMAIL CHECK [EMAIL ADDRESS = "+emailAddress+"] IS => "+emailExists );
-		return emailExists;
-	}
-	
-	
-	
-	
-							/* POSTS */
-	/*
-	 * Expecting input like this:
-	 {
-	  "email":"****@gmail.com",
 
-    "user": {
-    "username":"****",
-    "password":"*****"
-    		}
-	 }
-	 */
+    
+//	//Email Exists Check
+//	//using Request Params instead of @PathVariable
+//	@GetMapping(value="/profile/check-email")
+//	public boolean isEmailExists(@RequestParam (value = "email") String emailAddress ){
+//		LOGGER.info("FORGOT_PASSWORD'S EMAIL CHECK [ EMAIL ADDRESS=" + emailAddress + "]");
+//		boolean emailExists = userProfileService.emailExists(emailAddress);
+//		if (emailExists) {
+//			LOGGER.info("[EMAIL ADDRESS = "+emailAddress+"] EXISTS" );	
+//		} else {
+//			LOGGER.warn("[EMAIL ADDRESS = "+emailAddress+"] DOES NOT EXIST" );	
+//		}
+//		return emailExists;
+//	}
+	
+	
+
+							/* POSTS */
+	
+	
+	/* Expecting input like this: { "email":"****@gmail.com",
+	 * "user": { "username":"****", "password":"*****" } }*/
 	/*
 	 * NB: No need to add the ff column to the expected input above because:
-	 * "enabled" column is set to 0 by default if it's not included in input
-	 * "role" column has been set to 1 by default in the userProfile Service's createUser method
+	 * "enabled" column is set to 0 by default if it's not included in input "role"
+	 * column has been set to 1 by default in the userProfile Service's createUser
+	 * method
 	 */
-	@PostMapping(value = "/registration"
-	 , consumes = MediaType.APPLICATION_JSON_VALUE
-	)
+	@PostMapping(value = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<Object> register(@Valid @RequestBody UserProfile userProfile) {
 		LOGGER.info("INITIATING REGISTRATION OF USER [DETAILS= " + userProfile + "]");
@@ -90,7 +82,7 @@ public class UserProfileController {
 			LOGGER.warn("USERNAME [" + userProfile.getUser().getUsername() + "] ALREADY EXISTS");
 			throw new UsernameAlreadyExists();
 		}
-		
+
 		if (userProfileService.emailExists(userProfile.getEmail())) {
 			LOGGER.warn("EMAIL [" + userProfile.getEmail() + "] ALREADY EXISTS");
 			throw new EmailAlreadyExists();
@@ -99,28 +91,24 @@ public class UserProfileController {
 		LOGGER.info("USER [DETAILS= " + userProfile + "] REGISTERED SUCCESSFULLY");
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
-	
-	
-	
-	
-							/* DELETES */
-	
-	//@PreAuthorize("hasAuthority('ROLE_ADMIN')") or @PreAuthorize("hasRole('ADMIN')"), both work 
-	
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@DeleteMapping(value="/profile/{username}")
-	@Transactional
-	public String delete(@PathVariable (value = "username") String username) {
-		LOGGER.info("INITIATING DELETION OF USER PROFILE [USERNAME= " + username + "]");
-		UserProfile foundUserProfile = userProfileService.findUserProfileByUsername(username);
-		
-		userProfileService.deleteUserProfile(foundUserProfile);
-		 LOGGER.info("USER PROFILE  [DETAILS= " + foundUserProfile + "]" + " DELETED SUCCESSFULLY");
-		return "Profile with username: ["+foundUserProfile.getUser().getUsername()+"] deleted successfully";
-	}
-	
 
 	
 	
+						/* DELETES */
+
+	// @PreAuthorize("hasAuthority('ROLE_ADMIN')") or
+	// @PreAuthorize("hasRole('ADMIN')"), both work
+
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@DeleteMapping(value = "/profile/{username}")
+	@Transactional
+	public String delete(@PathVariable(value = "username") String username) {
+		LOGGER.info("INITIATING DELETION OF USER PROFILE [USERNAME= " + username + "]");
+		UserProfile foundUserProfile = userProfileService.findUserProfileByUsername(username);
+
+		userProfileService.deleteUserProfile(foundUserProfile);
+		LOGGER.info("USER PROFILE  [DETAILS= " + foundUserProfile + "]" + " DELETED SUCCESSFULLY");
+		return "Profile with username: [" + foundUserProfile.getUser().getUsername() + "] deleted successfully";
+	}
+
 }

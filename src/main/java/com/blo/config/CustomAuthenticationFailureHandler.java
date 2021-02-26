@@ -31,7 +31,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 			AuthenticationException exception) throws IOException, ServletException {
 		
 		//attaching request's ip address to log
-		LOGGER.warn(request.getRemoteAddr() + " HAS HIT AUTHENTICATION FAILURE HANDLER");
+		LOGGER.warn("IP ADDRESS ["+request.getRemoteAddr() + "] HAS HIT AUTHENTICATION FAILURE HANDLER");
 		 
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 	        Map<String, Object> data = new HashMap<>();
@@ -41,7 +41,8 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 //	        data.put(
 //	          "Timestamp", 
 //	          LocalDateTime.now());
-	        LOGGER.warn(request.getRemoteAddr()+ " CANNOT AUTHENTICATE [ EXCEPTION MESSAGE: "+exception.getMessage()+" ]");
+	        LOGGER.warn("SUPPOSED USER [ USERNAME = "+request.getParameter("username")+ "] MADE THIS AUTH REQUEST [ EXCEPTION MESSAGE= "+exception.getMessage()+" ]");
+	        LOGGER.warn("IP ADDRESS ["+request.getRemoteAddr()+ "] CANNOT AUTHENTICATE [ EXCEPTION MESSAGE= "+exception.getMessage()+" ]");
 	      
 	        response.getOutputStream()
 	          .println(objectMapper.writeValueAsString(data));
