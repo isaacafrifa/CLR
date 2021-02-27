@@ -4,14 +4,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +18,7 @@ import com.blo.entity.UserProfile;
 import com.blo.model.GenericResponse;
 import com.blo.model.OperationsEnum;
 import com.blo.model.Utility;
+import com.blo.service.EmailService;
 import com.blo.service.UserProfileService;
 
 @RestController
@@ -30,7 +28,7 @@ public class ForgotPasswordController {
 	@Autowired
 	private UserProfileService userProfileService;
 	@Autowired
-	private JavaMailSender mailSender;
+	private EmailService emailService;
 
 	
 	@GetMapping("/reset_password/check_token")
@@ -72,8 +70,8 @@ public class ForgotPasswordController {
 		    userProfileService.updateResetPasswordToken(token, userEmail);
 			String resetPasswordLink = Utility.getSiteURL(request) + "/reset-password?token=" + token;
 			LOGGER.info("RESET PASSWORD LINK = [ " + resetPasswordLink + "] CREATED");
-			
-			sendResetPasswordEmail(userEmail, user.getUser().getUsername(), resetPasswordLink);
+			//send email
+			emailService.sendResetPasswordEmail(userEmail, user.getUser().getUsername(), resetPasswordLink);
 			LOGGER.info("RESET PASSWORD EMAIL SENT TO [EMAIL = " + userEmail + ", WITH LINK = " + resetPasswordLink + "]");
 		}
 		catch (UnsupportedEncodingException | MessagingException e) {
@@ -113,29 +111,6 @@ public class ForgotPasswordController {
 	
 	
 	
-	// creating email instance
-	public void sendResetPasswordEmail(String recipientEmail, String userName, String link)
-			throws MessagingException, UnsupportedEncodingException {
-		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-		helper.setFrom("support@clr.com", "CLR Support");
-		helper.setTo(recipientEmail);
-
-		String subject = "Password Reset Request";
-		String content = "<p>Hello <b>" + userName + "</b>,</p>"
-				+ "<p>We have received a request for your password to be reset.</p>"
-				+ "<p>To reset your password, please click on the link below:</p>" 
-				+ "<p><a href=\"" + link
-				+ "\">Change my password</a></p>"
-				+ "<p>Kindly ignore this email if you remember your password or you did not make this request.</p>"
-				+ "<br>" + "<b>- CLR Support Team</b>";
-
-		helper.setSubject(subject);
-		helper.setText(content, true);
-
-		// send mail
-		mailSender.send(message);
-	}
 
 }

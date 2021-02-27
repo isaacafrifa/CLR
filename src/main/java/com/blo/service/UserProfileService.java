@@ -84,9 +84,9 @@ public class UserProfileService {
 	@Transactional
 	public UserProfile updatePassword(UserProfile userProfile, String newPassword) {
 		String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
-		// overwriting user's password with encrypted password 
+		// Set new encrypted password 
 		userProfile.getUser().setPassword(encodedPassword);
-		// overwriting userProfile's resetPasswordToken as null
+		// Set the reset token to null so it cannot be used again
 		userProfile.setResetPasswordToken(null);
 		return userProfileRepository.save(userProfile);
 	}

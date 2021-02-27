@@ -38,7 +38,6 @@ import com.blo.model.Constants;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
-
 	
 	//not MyUserDetailsService
 	@Autowired

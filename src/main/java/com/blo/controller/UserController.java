@@ -3,6 +3,8 @@ package com.blo.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,8 @@ public class UserController {
 	}
 
 	@GetMapping("/logout_success")
-	public Map<String, Object> logout_success() {
-		LOGGER.info("LOGOUT_SUCCESS ENDPOINT HAS BEEN HIT");
+	public Map<String, Object> logout_success(HttpServletRequest request) {
+		LOGGER.info("IP ADDRESS ["+request.getRemoteAddr()  + "] HAS HIT LOGOUT_SUCCESS [ \"../logout_success\" ] ENDPOINT");
 		Map<String, Object> map = new HashMap<>();
 		map.put(LOGGED_OUT_STATUS, "LOGGED_OUT");
 		return map;
