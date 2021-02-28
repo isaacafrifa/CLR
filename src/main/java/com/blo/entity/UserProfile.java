@@ -1,5 +1,6 @@
 package com.blo.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -50,6 +51,9 @@ public class UserProfile {
 
 	@Column(name = "repwd_token")
     private String resetPasswordToken;
+
+	@Column(name = "repwd_token_creation_date",columnDefinition = "TIMESTAMP")
+    private LocalDateTime tokenCreationDate;
 	
 	//Extra Constructor
 	public UserProfile(String email) {

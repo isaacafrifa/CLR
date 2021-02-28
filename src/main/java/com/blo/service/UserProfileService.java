@@ -1,5 +1,7 @@
 package com.blo.service;
 
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,10 +68,16 @@ public class UserProfileService {
 		return userProfileRepository.existsByEmail(email);
 	}
 
+	
+	
+	/*
+	 * RESET PASSWORD METHODS 
+	 */
 	public UserProfile getByResetPasswordToken(String token) {
 		return userProfileRepository.findByResetPasswordToken(token);
 	}
 
+	
 	public void updateResetPasswordToken(String token, String email) throws UserNotFound {
 		UserProfile userProfile = userProfileRepository.findByEmail(email);
 		if (userProfile != null) {
@@ -80,14 +88,22 @@ public class UserProfileService {
 			throw new UserNotFound();
 		}
 	}
+	
+	
+	public void updateResetPasswordTokenCreationDate(UserProfile userProfile) {
+			userProfile.setTokenCreationDate(LocalDateTime.now());
+			userProfileRepository.save(userProfile);	
+	}
 
+	
 	@Transactional
 	public UserProfile updatePassword(UserProfile userProfile, String newPassword) {
 		String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
 		// Set new encrypted password 
 		userProfile.getUser().setPassword(encodedPassword);
-		// Set the reset token to null so it cannot be used again
+		// Set the reset token and creation date to null so it cannot be used again
 		userProfile.setResetPasswordToken(null);
+		userProfile.setTokenCreationDate(null);
 		return userProfileRepository.save(userProfile);
 	}
 

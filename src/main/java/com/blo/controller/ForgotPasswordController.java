@@ -1,8 +1,7 @@
 package com.blo.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.util.UUID;
-
+import java.time.LocalDateTime;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +18,7 @@ import com.blo.model.GenericResponse;
 import com.blo.model.OperationsEnum;
 import com.blo.model.Utility;
 import com.blo.service.EmailService;
+import com.blo.service.TokenService;
 import com.blo.service.UserProfileService;
 
 @RestController
@@ -29,26 +29,16 @@ public class ForgotPasswordController {
 	private UserProfileService userProfileService;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private TokenService tokenService;
 
 	
 	@GetMapping("/reset_password/check_token")
 	public GenericResponse checkResetPasswordTokenValidity(HttpServletRequest request, @RequestParam(value = "token") String token) {
-	   
-		LOGGER.info("CHECKING RESET PASSWORD TOKEN VALIDITY [ TOKEN = "+token+" ]");
-	    // attaching request's ip address to log
- 		LOGGER.info("IP ADDRESS = [" +request.getRemoteAddr() + " ] MADE THIS REQUEST");
+ 		LOGGER.info("IP ADDRESS = ["+request.getRemoteAddr() +"] HAS MADE A REQUEST = [check reset password token validity]");
  		
-	    UserProfile userProfile = userProfileService.getByResetPasswordToken(token);
-	    if (userProfile == null) {
-	    	 LOGGER.warn("RESET TOKEN = [ "+token+" ] IS INVALID");
-			return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Invalid Reset Token");
-	    }
-	    
-	    LOGGER.info("RESET TOKEN = [ "+token+" ] IS VALID");
-		return new GenericResponse(OperationsEnum.SUCCESSFUL_OPERATION.toString(),null);
+ 		return checkResetTokenValidity(token);
 	}
-	
-	
 	
 	
 
@@ -62,12 +52,11 @@ public class ForgotPasswordController {
 		// if (user==null) { LOGGER.warn("USER WITH EMAIL ADDRESS = [ "+userEmail+" ] DOES NOT EXIST" ); throw new UserNotFound();}
 		LOGGER.info("USER WITH EMAIL ADDRESS = [ " + userEmail + " ] EXISTS");
 		
-		// create random token
-		String token = UUID.randomUUID().toString();
+		String token = tokenService.generateToken();
 		// userProfileService.createPasswordResetTokenForUser(user, token);
-
 		try {
 		    userProfileService.updateResetPasswordToken(token, userEmail);
+		    userProfileService.updateResetPasswordTokenCreationDate(user);
 			String resetPasswordLink = Utility.getSiteURL(request) + "/reset-password?token=" + token;
 			LOGGER.info("RESET PASSWORD LINK = [ " + resetPasswordLink + "] CREATED");
 			//send email
@@ -95,8 +84,13 @@ public class ForgotPasswordController {
 			LOGGER.warn("RESET TOKEN = [ "+token+" ] IS INVALID");
 			return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Invalid Reset Token");
 		}
+		LocalDateTime tokenCreationDate = userProfile.getTokenCreationDate();
+		if (tokenService.isTokenExpired(tokenCreationDate)) {
+			LOGGER.warn("RESET TOKEN = [ " + token + " ] IS EXPIRED");
+			return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(), "Expired Reset Token");
+		}
+		LOGGER.info("RESET TOKEN = [ "+token+" ] IS VALID AND NOT EXPIRED");
 		
-	    LOGGER.info("RESET TOKEN = [ "+token+" ] IS VALID");
 	    //update with new password
 		LOGGER.info("RESETTING PASSWORD OF USER = [ "+userProfile.getEmail()+" ]");
 	    UserProfile updatedUser =userProfileService.updatePassword(userProfile, newPassword);
@@ -111,6 +105,26 @@ public class ForgotPasswordController {
 	
 	
 	
+	//////////////Refactor later
+	public GenericResponse checkResetTokenValidity(String token) {
+		LOGGER.info("CHECKING RESET PASSWORD TOKEN VALIDITY [ TOKEN = "+token+" ]");
+		
+		 UserProfile userProfile = userProfileService.getByResetPasswordToken(token);
+		    if (userProfile == null) {
+		    	 LOGGER.warn("RESET TOKEN = [ "+token+" ] IS INVALID");
+				return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Invalid Reset Token");
+		    }
+
+	 		LOGGER.info("USER PROFILE --------->"+userProfile);
+		    LocalDateTime tokenCreationDate = userProfile.getTokenCreationDate();
+		    if(tokenService.isTokenExpired(tokenCreationDate)) {
+		    	 LOGGER.warn("RESET TOKEN = [ "+token+" ] IS EXPIRED");
+		    	return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Expired Reset Token");
+		    }
+		    
+		    LOGGER.info("RESET TOKEN = [ "+token+" ] IS VALID AND NOT EXPIRED");
+			return new GenericResponse(OperationsEnum.SUCCESSFUL_OPERATION.toString(),null);
+	}
 
 
 }

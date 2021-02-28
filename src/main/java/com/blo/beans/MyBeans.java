@@ -37,5 +37,7 @@ public class MyBeans {
 
 		return mailSender;
 	}
+	
+
 
 }

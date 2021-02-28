@@ -24,7 +24,6 @@ This project:
 ### App Demo 
 * Hosted on [https://completelr.herokuapp.com/](https://completelr.herokuapp.com/)
 
-
 ### Technologies 
 Project is created with:
 

@@ -10,7 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.blo.entity.User;
-import com.blo.service.MyUserDetailsService;
 
 public class UserPrincipal implements UserDetails {
 

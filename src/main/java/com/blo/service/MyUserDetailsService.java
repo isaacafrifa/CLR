@@ -30,13 +30,15 @@ public class MyUserDetailsService implements UserDetailsService
 		 
 		 if(user==null) throw new UsernameNotFoundException("User doesn't exist");
 		 
-	
 		 //commented out cos I'm checking for this in UserPrincipal class
 //		//checking isEnabled here
 //		 if (user.getIsAccountEnabled()!=1) {
 //		        throw new DisabledException("User is disabled");
 //		    }
 
+		 //Implement lastLogin by setting current timestamp here
+		// LOGGER.info("In UserDetailsService method: "+user.toString());
+		 
 		return new UserPrincipal(user);
 	}
 	
