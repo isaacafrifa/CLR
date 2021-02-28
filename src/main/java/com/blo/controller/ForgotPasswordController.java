@@ -115,7 +115,6 @@ public class ForgotPasswordController {
 				return new GenericResponse(OperationsEnum.UNSUCCESSFUL_OPERATION.toString(),"Invalid Reset Token");
 		    }
 
-	 		LOGGER.info("USER PROFILE --------->"+userProfile);
 		    LocalDateTime tokenCreationDate = userProfile.getTokenCreationDate();
 		    if(tokenService.isTokenExpired(tokenCreationDate)) {
 		    	 LOGGER.warn("RESET TOKEN = [ "+token+" ] IS EXPIRED");
